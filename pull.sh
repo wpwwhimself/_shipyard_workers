@@ -3,9 +3,7 @@
 
 #### INCLUDES ####
 
-DIR="${BASH_SOURCE%/*}"
-if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
-. "$DIR"/functions.sh
+source "$(dirname "$0")/src/functions.sh"
 
 #### ARGUMENTS ####
 
@@ -14,44 +12,49 @@ if [ -z "$1" ] || [ ! -d "$1" ]; then
     exit 1
 fi
 
-DIRECTORY=$1
-
 #### FUNCTIONS ####
 
 update() {
   local folder=$1
 
-  heading "🔨 Entering directory: $folder"
+  cd "$folder"
 
-  if [ -d "$dir/.git" ]; then
+  if [ -d "$folder/.git" ]; then
     git pull
+
+    if [ -e "composer.json" ]; then
+      composer update
+      php artisan optimize:clear
+      php artisan migrate --force
+    fi
+
+    if [ -e "package.json" ]; then
+      npm install
+      npm run build
+    fi
+
+    return 0
   fi
 
-  if [ -e "$dir/composer.json" ]; then
-    composer update
-    php artisan optimize:clear
-    php artisan migrate --force
-  fi
-
-  if [ -e "$dir/package.json" ]; then
-    npm install
-    npm run build
-  fi
+  return 1
 }
 
 traverse() {
   local parent_dir="$1"
 
   # Loop through all items in the directory
-  for item in "$parent_dir"/*; do
-    if [ -d "$item" ]; then
-      heading "🔨 Entering directory: $folder"
+  for folder in "$parent_dir"/*; do
+    if [ -d "$folder" ]; then
+      cd "$folder"
+      heading "🔨 Entering directory: $(pwd)"
+      
+      update .
 
-      # Call update function inside the directory
-      update "$item"
+      if [ $? -ne 0 ]; then
+        traverse .
+      fi
 
-      # Recursively call traverse function on subdirectory
-      traverse "$item"
+      cd ..
     fi
   done
 }
@@ -60,6 +63,7 @@ traverse() {
 
 heading "🍃 Pulling..."
 
-traverse "$DIRECTORY"
+update "$1"
+traverse "$1"
 
 heading "✅ All done!"
