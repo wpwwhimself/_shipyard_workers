@@ -66,4 +66,9 @@ heading "🍃 Pulling..."
 update "$1"
 traverse "$1"
 
+####
+
+heading "🔧 Ensuring Shipyard Workers are still able to run..."
+find "$1/_shipyard_workers" -name "*.sh" -exec chmod +x {} \;
+
 heading "✅ All done!"
