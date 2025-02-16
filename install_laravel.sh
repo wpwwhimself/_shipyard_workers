@@ -1,11 +1,11 @@
 # Script for installing Laravel application cloned from git
 # Run from project directory
 
-DIR="${BASH_SOURCE%/*}"
-if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
-. "$DIR"/functions.sh
+#### INCLUDES ####
 
-################
+source "$(dirname "$0")/src/functions.sh"
+
+#### START ####
 
 heading "🔨 Configuring repository..."
 
