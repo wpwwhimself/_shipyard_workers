@@ -68,7 +68,7 @@ traverse "$1"
 
 ####
 
-heading "🔧 Ensuring Shipyard Workers are still able to run..."
+heading "🔧 Ensuring scripts are still able to run..."
 find "$1" -name "*.sh" -exec chmod +x {} \;
 
 heading "✅ All done!"
