@@ -64,7 +64,10 @@ traverse() {
 heading "🍃 Pulling..."
 
 update "$1"
-traverse "$1"
+
+if [ $? -ne 0 ]; then
+  traverse "$1"
+fi
 
 ####
 
