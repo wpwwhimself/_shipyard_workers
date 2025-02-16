@@ -21,6 +21,10 @@ update() {
 
   if [ -d "$folder/.git" ]; then
     git pull
+    if [ $? -ne 0 ]; then
+      git reset --hard
+      git pull
+    fi
 
     if [ -e "composer.json" ]; then
       composer update
