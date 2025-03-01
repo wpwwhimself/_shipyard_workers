@@ -25,6 +25,9 @@ if [ -z "$1" ] || [ ! -d "$1" ]; then
   exit 1
 fi
 
+path_to_directory="$1"
+shift
+
 while getopts ":hp:" opt; do
   case $opt in
     h)
