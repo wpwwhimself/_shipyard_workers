@@ -13,7 +13,7 @@ usage () {
   echo "Script for pulling and updating all projects"
   echo "Run from anywhere"
   echo "-----------------"
-  echo "Usage: $0 <path_to_directory>"
+  echo "Usage: $0 <path_to_directory> [OPTIONS]"
   echo "Options:"
   echo "  -h, --help          Show this message"
   echo "      --php=<path>    Path to PHP executable"
@@ -25,8 +25,8 @@ if [ -z "$1" ] || [ ! -d "$1" ]; then
   exit 1
 fi
 
-while [ $# -gt 0 ]; do
-  case $1 in
+while [ $# -gt 1 ]; do
+  case $2 in
     -h | --help)
       usage
       exit 0
