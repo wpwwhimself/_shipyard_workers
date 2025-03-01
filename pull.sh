@@ -15,8 +15,8 @@ usage () {
   echo "-----------------"
   echo "Usage: $0 <path_to_directory> [OPTIONS]"
   echo "Options:"
-  echo "  -h, --help          Show this message"
-  echo "      --php=<path>    Path to PHP executable"
+  echo "  -h           Show this message"
+  echo "  -p <path>    Path to PHP executable"
 }
 
 if [ -z "$1" ] || [ ! -d "$1" ]; then
@@ -25,30 +25,27 @@ if [ -z "$1" ] || [ ! -d "$1" ]; then
   exit 1
 fi
 
-while [ $# -gt 1 ]; do
-  case $2 in
-    -h | --help)
+while getopts ":hp:" opt; do
+  case $opt in
+    h)
       usage
       exit 0
       ;;
-    --php*)
-      if ! has_argument $@; then
-        heading "🚨 PHP path not specified"
-        usage
-        exit 1
-      fi
-
-      PHP=$(extract_argument $@)
+    p)
+      PHP=$OPTARG
       COMPOSER=$(which composer)
-      shift
       ;;
-    *)
+    \?)
       heading "🚨 Unknown argument: $1"
       usage
       exit 1
       ;;
+    :)
+      heading "🚨 Option $OPTARG requires an argument"
+      usage
+      exit 1
+      ;;
   esac
-  shift
 done
 
 #### FUNCTIONS ####
