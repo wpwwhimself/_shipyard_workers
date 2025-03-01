@@ -1,16 +1,55 @@
-# Script for pulling and updating all projects
-# Run from anywhere
-
 #### INCLUDES ####
 
 source "$(dirname "$0")/src/functions.sh"
 
+#### SETUP ####
+
+PHP=php
+COMPOSER=composer
+
 #### ARGUMENTS ####
 
+usage () {
+  echo "Script for pulling and updating all projects"
+  echo "Run from anywhere"
+  echo "-----------------"
+  echo "Usage: $0 <path_to_directory>"
+  echo "Options:"
+  echo "  -h, --help          Show this message"
+  echo "      --php=<path>    Path to PHP executable"
+}
+
 if [ -z "$1" ] || [ ! -d "$1" ]; then
-    echo "Usage: $0 <path_to_directory>"
-    exit 1
+  heading "🚨 Directory not specified"
+  usage
+  exit 1
 fi
+
+while [ $# -gt 0 ]; do
+  case $1 in
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    --php*)
+      if ! has_argument $@; then
+        heading "🚨 PHP path not specified"
+        usage
+        exit 1
+      fi
+
+      PHP=$(extract_argument $@)
+      COMPOSER=$(which composer)
+      shift
+      ;;
+    *)
+      heading "🚨 Unknown argument: $1"
+      usage
+      exit 1
+      ;;
+  esac
+  shift
+done
 
 #### FUNCTIONS ####
 
@@ -27,9 +66,9 @@ update() {
     fi
 
     if [ -e "composer.json" ]; then
-      composer update
-      php artisan optimize:clear
-      php artisan migrate --force
+      $PHP $COMPOSER update
+      $PHP artisan optimize:clear
+      $PHP artisan migrate --force
     fi
 
     if [ -e "package.json" ]; then
