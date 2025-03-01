@@ -106,15 +106,15 @@ traverse() {
 
 heading "🍃 Pulling..."
 
-update "$1"
+update $path_to_directory
 
 if [ $? -ne 0 ]; then
-  traverse "$1"
+  traverse $path_to_directory
 fi
 
 ####
 
 heading "🔧 Ensuring scripts are still able to run..."
-find "$1" -name "*.sh" -exec chmod +x {} \;
+find "$path_to_directory" -name "*.sh" -exec chmod +x {} \;
 
 heading "✅ All done!"
