@@ -1,9 +1,46 @@
-# Script for installing Laravel application cloned from git
-# Run from project directory
-
 #### INCLUDES ####
 
 source "$(dirname "$0")/src/functions.sh"
+
+#### SETUP ####
+
+PHP=php
+COMPOSER=composer
+
+#### ARGUMENTS ####
+
+usage () {
+  echo "Script for installing Laravel application cloned from git"
+  echo "Run from project directory"
+  echo "-----------------"
+  echo "Usage: $0 [OPTIONS]"
+  echo "Options:"
+  echo "  -h           Show this message"
+  echo "  -p <path>    Path to PHP executable"
+}
+
+while getopts ":hp:" opt; do
+  case $opt in
+    h)
+      usage
+      exit 0
+      ;;
+    p)
+      PHP=$OPTARG
+      COMPOSER=$(which composer)
+      ;;
+    \?)
+      heading "🚨 Unknown argument: $1"
+      usage
+      exit 1
+      ;;
+    :)
+      heading "🚨 Option $OPTARG requires an argument"
+      usage
+      exit 1
+      ;;
+  esac
+done
 
 #### START ####
 
@@ -20,11 +57,11 @@ read -p "Enter database name: " DBNAME
 sed -i '' "s/DB_USERNAME=.*/DB_USERNAME=daemon/" .env
 sed -i '' "s/DB_PASSWORD=.*/DB_PASSWORD=7DmHdDctBI6?/" .env
 
-composer install
-php artisan key:generate
-php artisan migrate --seed
+$PHP $COMPOSER install
+$PHP artisan key:generate
+$PHP artisan migrate --seed
 
-php artisan storage:link
+$PHP artisan storage:link
 
 find . -type f -exec chmod 644 {} \;
 find . -type d -exec chmod 755 {} \;
