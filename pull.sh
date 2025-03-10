@@ -65,6 +65,11 @@ update() {
       git pull
     fi
 
+    # if repo is up to date, don't do anything
+    if [ "$(git rev-parse HEAD)" = "$(git rev-parse @{u})" ]; then
+      return 0
+    fi
+
     if [ -e "composer.json" ]; then
       $PHP $COMPOSER update
       $PHP artisan optimize:clear
