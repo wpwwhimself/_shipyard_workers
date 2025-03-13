@@ -60,10 +60,10 @@ update() {
 
   if [ -d "$folder/.git" ]; then
     local git_output
-    git_output=$(git pull 2>&1)
+    git_output=$(git pull | tee /dev/tty)
     if [ $? -ne 0 ]; then
       git reset --hard
-      git_output=$(git pull 2>&1)
+      git_output=$(git pull | tee /dev/tty)
     fi
 
     # if repo is up to date, don't do anything
