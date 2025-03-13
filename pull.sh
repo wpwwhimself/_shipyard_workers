@@ -59,14 +59,15 @@ update() {
   cd "$folder"
 
   if [ -d "$folder/.git" ]; then
-    git pull
+    local git_output
+    git_output=$(git pull 2>&1)
     if [ $? -ne 0 ]; then
       git reset --hard
-      git pull
+      git_output=$(git pull 2>&1)
     fi
 
     # if repo is up to date, don't do anything
-    if [ "$(git rev-parse HEAD)" = "$(git rev-parse @{u})" ]; then
+    if echo "$git_output" | grep -q "Already up to date"; then
       return 0
     fi
 
