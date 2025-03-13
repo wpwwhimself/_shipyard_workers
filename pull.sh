@@ -6,6 +6,7 @@ source "$(dirname "$0")/src/functions.sh"
 
 PHP=php
 COMPOSER=composer
+INSTALL_ANYWAY=0
 
 #### ARGUMENTS ####
 
@@ -17,6 +18,7 @@ usage () {
   echo "Options:"
   echo "  -h           Show this message"
   echo "  -p <path>    Path to PHP executable"
+  echo "  -f           Force reinstallation of dependencies (normally skipped if repo is up to date)"
 }
 
 if [ -z "$1" ] || [ ! -d "$1" ]; then
@@ -28,7 +30,7 @@ fi
 path_to_directory="$1"
 shift
 
-while getopts ":hp:" opt; do
+while getopts ":hp:f" opt; do
   case $opt in
     h)
       usage
@@ -37,6 +39,9 @@ while getopts ":hp:" opt; do
     p)
       PHP=$OPTARG
       COMPOSER=$(which composer)
+      ;;
+    f)
+      INSTALL_ANYWAY=1
       ;;
     \?)
       heading "🚨 Unknown argument: $1"
@@ -67,7 +72,7 @@ update() {
     fi
 
     # if repo is up to date, don't do anything
-    if echo "$git_output" | grep -q "Already up to date"; then
+    if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date"; then
       return 0
     fi
 
