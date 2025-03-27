@@ -66,7 +66,7 @@ update() {
   if [ -d "$folder/.git" ]; then
     local git_output
     git_output=$(git pull | tee /dev/tty)
-    if [ $? -ne 0 ]; then
+    if echo "$git_output" | grep -q "Aborting"; then
       git reset --hard
       git_output=$(git pull | tee /dev/tty)
     fi
