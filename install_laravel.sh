@@ -53,9 +53,10 @@ sed -i 's/APP_LOCALE=en/APP_LOCALE=pl/' .env
 
 read -p "Enter database name: " DBNAME
 sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DBNAME}/" .env
-read -p "Enter database name: " DBNAME
-sed -i "s/DB_USERNAME=.*/DB_USERNAME=daemon/" .env
-sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=7DmHdDctBI6?/" .env
+read -p "Enter database username: " DBUSER
+sed -i "s/DB_USERNAME=.*/DB_USERNAME=${DBUSER}/" .env
+read -p "Enter database password: " DBPASS
+sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=\"${DBPASS}\"/" .env
 
 $PHP $COMPOSER install
 $PHP artisan key:generate
