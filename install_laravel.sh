@@ -48,14 +48,14 @@ heading "🔨 Configuring repository..."
 
 cp .env.example .env
 
-sed -i '' 's/APP_ENV=local/APP_ENV=stage/' .env
-sed -i '' 's/APP_LOCALE=en/APP_LOCALE=pl/' .env
+sed -i 's/APP_ENV=local/APP_ENV=stage/' .env
+sed -i 's/APP_LOCALE=en/APP_LOCALE=pl/' .env
 
 read -p "Enter database name: " DBNAME
-sed -i '' "s/DB_DATABASE=.*/DB_DATABASE=${DBNAME}/" .env
+sed -i "s/DB_DATABASE=.*/DB_DATABASE=${DBNAME}/" .env
 read -p "Enter database name: " DBNAME
-sed -i '' "s/DB_USERNAME=.*/DB_USERNAME=daemon/" .env
-sed -i '' "s/DB_PASSWORD=.*/DB_PASSWORD=7DmHdDctBI6?/" .env
+sed -i "s/DB_USERNAME=.*/DB_USERNAME=daemon/" .env
+sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=7DmHdDctBI6?/" .env
 
 $PHP $COMPOSER install
 $PHP artisan key:generate
