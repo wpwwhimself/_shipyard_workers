@@ -26,7 +26,7 @@ df -h /
 
 heading "💊 Space taken"
 
-du -khd 2 "$1" | sort -hr
+du -khd 2 "$1" | sort -hr | head -n 20
 
 ####
 
