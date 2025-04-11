@@ -66,7 +66,7 @@ update() {
   if [ -d "$folder/.git" ]; then
     local git_output
     git_output=$(git pull | tee /dev/tty)
-    if echo "$git_output" | grep -q "Aborting"; then
+    if [ $? -ne 0 ]; then
       git reset --hard
       git_output=$(git pull | tee /dev/tty)
     fi
@@ -124,8 +124,5 @@ if [ $? -ne 0 ]; then
 fi
 
 ####
-
-heading "🔧 Ensuring scripts are still able to run..."
-find "$path_to_directory" -name "*.sh" -exec chmod +x {} \;
 
 heading "✅ All done!"
