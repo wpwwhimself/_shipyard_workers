@@ -27,7 +27,7 @@ if [ -z "$1" ] || [ ! -d "$1" ]; then
   exit 1
 fi
 
-path_to_directory="$1"
+path_to_directory=$(readlink -m "$1")
 shift
 
 while getopts ":hp:f" opt; do
