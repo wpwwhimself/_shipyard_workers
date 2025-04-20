@@ -5,7 +5,7 @@ source "$(dirname "$0")/src/functions.sh"
 #### SETUP ####
 
 PHP=php
-COMPOSER=composer
+COMPOSER=$(which composer)
 INSTALL_ANYWAY=0
 
 #### ARGUMENTS ####
@@ -38,7 +38,6 @@ while getopts ":hp:f" opt; do
       ;;
     p)
       PHP=$OPTARG
-      COMPOSER=$(which composer)
       ;;
     f)
       INSTALL_ANYWAY=1
