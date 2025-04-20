@@ -77,6 +77,7 @@ update() {
 
     if [ -e "composer.json" ]; then
       $PHP $COMPOSER update
+      chmod -R ug+rwx storage bootstrap/cache # ensure permissions for cache:clear
       $PHP artisan optimize:clear
       $PHP artisan migrate --force
     fi
