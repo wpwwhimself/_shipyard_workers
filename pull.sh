@@ -56,7 +56,7 @@ while getopts ":hp:f" opt; do
 done
 
 #### FUNCTIONS ####
-
+#
 update() {
   local folder=$1
 
