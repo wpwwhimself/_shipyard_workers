@@ -65,12 +65,12 @@ update() {
   if [ -d "$folder/.git" ]; then
     local git_output
     local pull_status
-    git_output = $(git pull)
-    pull_status = $?
+    git_output=$(git pull)
+    pull_status=$?
     if [ $? -ne 0 ]; then
       git reset --hard
-      git_output = $(git pull)
-      pull_status = $?
+      git_output=$(git pull)
+      pull_status=$?
     fi
 
     # if repo is up to date, don't do anything
