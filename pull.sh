@@ -67,7 +67,7 @@ update() {
     local pull_status
     git_output=$(git pull)
     pull_status=$?
-    if [ $? -ne 0 ]; then
+    if [ $pull_status -ne 0 ]; then
       git reset --hard
       git_output=$(git pull)
       pull_status=$?
