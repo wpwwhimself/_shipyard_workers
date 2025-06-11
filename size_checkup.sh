@@ -20,8 +20,9 @@ heading "🩺 Checking apps..."
 
 heading "💊 Total space available"
 
-df -h /
-df -i /
+df -h / "$1"
+df -ih / "$1"
+du -sh / "$1"
 quota -s
 
 ####
