@@ -22,7 +22,7 @@ heading "💊 Total space available"
 
 df -h /
 df -i /
-quota
+quota -s
 
 ####
 
