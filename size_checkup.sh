@@ -21,6 +21,8 @@ heading "🩺 Checking apps..."
 heading "💊 Total space available"
 
 df -h /
+df -i /
+quota
 
 ####
 
