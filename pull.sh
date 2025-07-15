@@ -31,7 +31,7 @@ fi
 path_to_directory=$(readlink -m "$1")
 shift
 
-while getopts ":hpc:f" opt; do
+while getopts ":hp:c:f" opt; do
   case $opt in
     h)
       usage
