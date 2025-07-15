@@ -18,6 +18,7 @@ usage () {
   echo "Options:"
   echo "  -h           Show this message"
   echo "  -p <path>    Path to PHP executable"
+  echo "  -c <path>    Path to Composer executable"
   echo "  -f           Force reinstallation of dependencies (normally skipped if repo is up to date)"
 }
 
@@ -38,6 +39,9 @@ while getopts ":hp:f" opt; do
       ;;
     p)
       PHP=$OPTARG
+      ;;
+    c)
+      COMPOSER=$OPTARG
       ;;
     f)
       INSTALL_ANYWAY=1
