@@ -97,7 +97,7 @@ update() {
     return 0
   fi
 
-  return 0
+  return 1
 }
 
 traverse() {
