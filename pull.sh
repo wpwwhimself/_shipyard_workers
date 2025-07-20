@@ -81,28 +81,17 @@ update() {
     if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date"; then
       return 0
     fi
-
-    # if directory doesn't have composer or node things and still gitted, assume it's a multi-directory repo and traverse anyway
-    if [ ! -e "composer.json" ] && [ ! -e "package.json" ]; then
-      return 1
-    fi
-
-    if [ -e "composer.json" ]; then
-      $PHP $COMPOSER update
-      chmod -R ug+rwx storage bootstrap/cache # ensure permissions for cache:clear
-      $PHP artisan optimize:clear
-      $PHP artisan migrate --force
-    fi
-
-    if [ -e "package.json" ]; then
-      npm install
-      npm run build
-    fi
-
-    return 0
   fi
 
-  return 1
+  # if directory doesn't have composer or node things and still gitted, assume it's a multi-directory repo and traverse anyway
+  if [ -e ".shipyard-multi" ]; then
+    return 1
+  fi
+
+  try_update_composer
+  try_update_node
+
+  return 0
 }
 
 traverse() {
@@ -123,6 +112,22 @@ traverse() {
       cd ..
     fi
   done
+}
+
+try_update_composer() {
+  if [ -e "composer.json" ]; then
+    $PHP $COMPOSER update
+    chmod -R ug+rwx storage bootstrap/cache # ensure permissions for cache:clear
+    $PHP artisan optimize:clear
+    $PHP artisan migrate --force
+  fi
+}
+
+try_update_node() {
+  if [ -e "package.json" ]; then
+    npm install
+    npm run build
+  fi
 }
 
 #### START ####
