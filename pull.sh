@@ -82,6 +82,11 @@ update() {
       return 0
     fi
 
+    # if directory doesn't have composer or node things and still gitted, assume it's a multi-directory repo and traverse anyway
+    if [ ! -e "composer.json" ] && [ ! -e "package.json" ]; then
+      return 1
+    fi
+
     if [ -e "composer.json" ]; then
       $PHP $COMPOSER update
       chmod -R ug+rwx storage bootstrap/cache # ensure permissions for cache:clear
