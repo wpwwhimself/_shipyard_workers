@@ -67,6 +67,8 @@ update() {
   cd "$folder"
 
   if [ -d "$folder/.git" ]; then
+    heading "Checking version" 3
+
     local git_output
     local pull_status
     git_output=$(git pull)
@@ -79,6 +81,7 @@ update() {
 
     # if repo is up to date, don't do anything
     if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date"; then
+      heading "Up to date" 3
       return 0
     fi
   fi
@@ -101,7 +104,7 @@ traverse() {
   for folder in "$parent_dir"/*; do
     if [ -d "$folder" ]; then
       cd "$folder"
-      heading "🔨 Entering directory: $(pwd)"
+      heading "🔨 Entering directory: $(pwd)" 2
       
       update .
 
@@ -116,6 +119,8 @@ traverse() {
 
 try_update_composer() {
   if [ -e "composer.json" ]; then
+    heading "Installing composer" 3
+
     $PHP $COMPOSER update
     chmod -R ug+rwx storage bootstrap/cache # ensure permissions for cache:clear
     $PHP artisan optimize:clear
@@ -125,6 +130,8 @@ try_update_composer() {
 
 try_update_node() {
   if [ -e "package.json" ]; then
+    heading "Installing node" 3
+    
     npm install
     npm run build
   fi
@@ -132,7 +139,7 @@ try_update_node() {
 
 #### START ####
 
-heading "🍃 Pulling..."
+heading "🍃 Pulling..." 1
 
 update $path_to_directory
 
@@ -142,4 +149,4 @@ fi
 
 ####
 
-heading "✅ All done!"
+heading "✅ All done!" 1
