@@ -143,7 +143,7 @@ try_update_shipyard() {
   # 1 - Shipyard has been updated
 
   if [ -f "I_USE_SHIPYARD.md" ]; then
-    heading "Updating shipyard" 3
+    heading "⚓ Updating shipyard" 3
 
     local shipyard_git_output
     local shipyard_pull_status
@@ -153,6 +153,20 @@ try_update_shipyard() {
       heading "Up to date" 3
       return 0
     fi
+
+    heading "Updated. Installing..." 3
+    original_branch=$(git branch --show-current)
+    branches=()
+    eval "$(git for-each-ref --shell --format='branches+=(%(refname:short))' refs/heads/)"
+
+    for branch in "${branches[@]}"; do
+      git checkout $branch
+      git merge shipyard/main --allow-unrelated-histories
+    done
+
+    git checkout $original_branch
+
+    heading "✅ Shipyard is ready" 3
 
     return 1
   fi
