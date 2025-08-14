@@ -83,7 +83,7 @@ update() {
 
     # if repo is up to date, don't do anything
     if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date" && [ "$shipyard_output" -eq 0 ]; then
-      heading "Up to date" 3
+      heading "Repo is up to date" 3
       return 0
     fi
   fi
@@ -144,18 +144,18 @@ try_update_shipyard() {
   # 1 - Shipyard has been updated
 
   if [ -f "I_USE_SHIPYARD.md" ]; then
-    heading "⚓ Updating shipyard" 3
+    heading "⚓ Updating Shipyard" 3
 
     local shipyard_git_output
     local shipyard_pull_status
     shipyard_git_output=$(git pull shipyard main)
 
     if echo "$shipyard_git_output" | grep -q "Already up to date"; then
-      heading "Up to date" 3
+      heading "⚓ Shipyard is up to date" 3
       return 0
     fi
 
-    heading "Updated. Installing..." 3
+    heading "⚓ Shipyard updated. Installing..." 3
     original_branch=$(git branch --show-current)
     branches=()
     eval "$(git for-each-ref --shell --format='branches+=(%(refname:short))' refs/heads/)"
@@ -167,7 +167,7 @@ try_update_shipyard() {
 
     git checkout $original_branch
 
-    heading "✅ Shipyard is ready" 3
+    heading "⚓ Shipyard is ready" 3
 
     return 1
   fi
