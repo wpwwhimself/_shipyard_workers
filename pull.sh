@@ -78,7 +78,8 @@ update() {
       git_output=$(git pull)
     fi
 
-    local shipyard_output=$(try_update_shipyard)
+    try_update_shipyard
+    local shipyard_output=$?
 
     # if repo is up to date, don't do anything
     if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date" && [ "$shipyard_output" -eq 0 ]; then
