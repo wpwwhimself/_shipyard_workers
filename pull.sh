@@ -60,7 +60,7 @@ while getopts ":hp:c:f" opt; do
 done
 
 #### FUNCTIONS ####
-#
+
 update() {
   local folder=$1
 
@@ -76,11 +76,12 @@ update() {
     if [ $pull_status -ne 0 ]; then
       git reset --hard
       git_output=$(git pull)
-      pull_status=$?
     fi
 
+    local shipyard_output=$(try_update_shipyard)
+
     # if repo is up to date, don't do anything
-    if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date"; then
+    if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date" && [ "$shipyard_output" -eq 0 ]; then
       heading "Up to date" 3
       return 0
     fi
@@ -135,6 +136,28 @@ try_update_node() {
     npm install
     npm run build
   fi
+}
+
+try_update_shipyard() {
+  # 0 - Shipyard is up to date or not installed
+  # 1 - Shipyard has been updated
+
+  if [ -f "I_USE_SHIPYARD.md" ]; then
+    heading "Updating shipyard" 3
+
+    local shipyard_git_output
+    local shipyard_pull_status
+    shipyard_git_output=$(git pull shipyard main)
+
+    if echo "$shipyard_git_output" | grep -q "Already up to date"; then
+      heading "Up to date" 3
+      return 0
+    fi
+
+    return 1
+  fi
+
+  return 0
 }
 
 #### START ####
