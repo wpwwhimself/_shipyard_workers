@@ -53,6 +53,7 @@ eval "$(git for-each-ref --shell --format='branches+=(%(refname:short))' refs/he
 for branch in "${branches[@]}"; do
   git checkout $branch
   git merge shipyard/main --allow-unrelated-histories -m "⚓⬆️ Shipyard updated"
+  git push
 done
 
 git checkout $original_branch
