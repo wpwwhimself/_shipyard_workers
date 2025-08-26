@@ -26,13 +26,19 @@ heading "DB size" 2
 echo "-- omitted --" #todo uzupełnić
 
 heading "Catalog size" 2
-du -achS $1 | sort -hr | head -n 10
+du -achd 3 $1 | sort -hr | head -n 15
 
 heading "Backups size" 2
-find $1 -name "*backup*" -exec du -sh {} \; | sort -hr | head -n 10
+find . -type f -name '*backup*.zip' -printf '%h\n' \
+  | sort -u \
+  | while read dir; do
+      count=$(find "$dir" -maxdepth 1 -type f -name '*backup*.zip' | wc -l)
+      size=$(du -ch "$dir"/*backup*.zip 2>/dev/null | tail -n1 | awk '{print $1}')
+      echo -e "$dir \t $count files, $size total"
+    done
 
 heading "Journal size" 2
 du -sh /var/log/journal
 
 heading "Temporary files" 2
-du -achS ~/tmp
+du -sh ~/tmp
