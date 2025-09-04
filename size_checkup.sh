@@ -1,32 +1,67 @@
-# Script for analyzing disk space used by projects
-# Run from anywhere
-
 #### INCLUDES ####
 
 source "$(dirname "$0")/src/functions.sh"
 
+#### SETUP ####
+
+RUN_DF=1
+
 #### ARGUMENTS ####
 
+usage () {
+  echo "Script for analyzing disk space used by projects"
+  echo "Run from anywhere"
+  echo "-----------------"
+  echo "Usage: $0 <path_to_directory> [OPTIONS]"
+  echo "Options:"
+  echo "  -h           Show this message"
+  echo "  -d           Don't run df"
+}
+
 if [ -z "$1" ] || [ ! -d "$1" ]; then
-    echo "Usage: $0 <path_to_directory>"
-    exit 1
+  heading "🚨 Directory not specified"
+  usage
+  exit 1
 fi
+
+path_to_directory=$(readlink -m "$1")
+shift
+
+while getopts ":hd" opt; do
+  case $opt in
+    h)
+      usage
+      exit 0
+      ;;
+    d)
+      RUN_DF=0
+      ;;
+    :)
+      heading "🚨 Option $OPTARG requires an argument"
+      usage
+      exit 1
+      ;;
+  esac
+done
 
 #### START ####
 
 heading "🩺 Checking apps..." 1
 
 heading "Total space available" 2
-df -h / $1
-df -ih / $1
-du -sh / $1
+
+if [ $RUN_DF -eq 1 ]; then
+  df -h $path_to_directory
+  df -ih $path_to_directory
+fi
+du -sh $path_to_directory
 quota -s
 
 heading "DB size" 2
 echo "-- omitted --" #todo uzupełnić
 
 heading "Catalog size" 2
-du -achd 3 $1 | sort -hr | head -n 15
+du -achd 3 $path_to_directory | sort -hr | head -n 15
 
 heading "Backups size" 2
 find . -type f -name '*backup*.zip' -printf '%h\n' \
