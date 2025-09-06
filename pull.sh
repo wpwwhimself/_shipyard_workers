@@ -124,8 +124,8 @@ try_update_composer() {
     heading "Installing composer" 3
 
     $PHP $COMPOSER update
-    $PHP artisan optimize:clear
     $PHP artisan migrate --force
+    $PHP artisan optimize:clear
   fi
 }
 
