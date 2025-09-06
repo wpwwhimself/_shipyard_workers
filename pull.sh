@@ -124,7 +124,6 @@ try_update_composer() {
     heading "Installing composer" 3
 
     $PHP $COMPOSER update
-    chmod -R ug+rwx storage bootstrap/cache # ensure permissions for cache:clear
     $PHP artisan optimize:clear
     $PHP artisan migrate --force
   fi
