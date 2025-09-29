@@ -66,6 +66,9 @@ update() {
 
   cd "$folder"
 
+  # update composer regardless of git status (packages may need an upgrade, like Shipyard)
+  try_update_composer
+
   if [ -d "$folder/.git" ]; then
     heading "Checking version" 3
 
@@ -93,7 +96,6 @@ update() {
     return 1
   fi
 
-  try_update_composer
   try_update_node
 
   return 0
@@ -136,43 +138,6 @@ try_update_node() {
     npm install
     npm run build
   fi
-}
-
-try_update_shipyard() {
-  # 0 - Shipyard is up to date or not installed
-  # 1 - Shipyard has been updated
-
-  if [ -f "I_USE_SHIPYARD.md" ]; then
-    heading "⚓ Updating Shipyard" 3
-
-    local shipyard_git_output
-    local shipyard_pull_status
-    shipyard_git_output=$(git pull shipyard main)
-
-    if echo "$shipyard_git_output" | grep -q "Already up to date"; then
-      heading "⚓ Shipyard is up to date" 3
-      return 0
-    fi
-
-    heading "⚓ Shipyard updated. Installing..." 3
-    original_branch=$(git branch --show-current)
-    branches=()
-    eval "$(git for-each-ref --shell --format='branches+=(%(refname:short))' refs/heads/)"
-
-    for branch in "${branches[@]}"; do
-      git checkout $branch
-      git merge shipyard/main --allow-unrelated-histories -m "⚓⬆️ Shipyard updated"
-      git push
-    done
-
-    git checkout $original_branch
-
-    heading "⚓ Shipyard is ready" 3
-
-    return 1
-  fi
-
-  return 0
 }
 
 #### START ####
