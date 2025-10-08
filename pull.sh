@@ -66,9 +66,6 @@ update() {
 
   cd "$folder"
 
-  # update composer regardless of git status (packages may need an upgrade, like Shipyard)
-  try_update_composer
-
   if [ -d "$folder/.git" ]; then
     heading "Checking version" 3
 
@@ -93,6 +90,7 @@ update() {
     return 1
   fi
 
+  try_update_composer
   try_update_node
 
   return 0
