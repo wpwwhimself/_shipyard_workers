@@ -66,6 +66,8 @@ update() {
 
   cd "$folder"
 
+  try_update_shipyard
+
   if [ -d "$folder/.git" ]; then
     heading "Checking version" 3
 
@@ -114,6 +116,14 @@ traverse() {
       cd ..
     fi
   done
+}
+
+try_update_shipyard() {
+  if [ -e "composer.json" ]; then
+    heading "Updating Shipyard ⚓" 3
+
+    $PHP $COMPOSER update wpwwhimself/shipyard
+  fi
 }
 
 try_update_composer() {
