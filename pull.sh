@@ -66,7 +66,7 @@ update() {
 
   cd "$folder"
 
-  try_update_shipyard
+  try_update_composer
 
   if [ -d "$folder/.git" ]; then
     heading "Checking version" 3
@@ -92,7 +92,6 @@ update() {
     return 1
   fi
 
-  try_update_composer
   try_update_node
 
   return 0
@@ -118,21 +117,12 @@ traverse() {
   done
 }
 
-try_update_shipyard() {
-  if [ -e "composer.json" ]; then
-    heading "Updating Shipyard ⚓" 3
-
-    $PHP $COMPOSER update wpwwhimself/shipyard
-  fi
-}
-
 try_update_composer() {
   if [ -e "composer.json" ]; then
     heading "Installing composer" 3
 
     $PHP $COMPOSER update
     $PHP artisan migrate --force
-    $PHP artisan optimize:clear
   fi
 }
 
