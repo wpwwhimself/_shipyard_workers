@@ -123,6 +123,7 @@ try_update_composer() {
 
     $PHP $COMPOSER update
     $PHP artisan migrate --force
+    $PHP artisan optimize
   fi
 }
 
