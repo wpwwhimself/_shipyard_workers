@@ -66,8 +66,6 @@ update() {
 
   cd "$folder"
 
-  try_update_composer
-
   if [ -d "$folder/.git" ]; then
     heading "Checking version" 3
 
@@ -83,7 +81,6 @@ update() {
     # if repo is up to date, don't do anything
     if [ "$INSTALL_ANYWAY" -eq 0 ] && echo "$git_output" | grep -q "Already up to date"; then
       heading "Repo is up to date" 3
-      return 0
     fi
   fi
 
@@ -92,6 +89,7 @@ update() {
     return 1
   fi
 
+  try_update_composer
   try_update_node
 
   return 0
