@@ -39,7 +39,7 @@ echo "$latest_release" > ./latest_version
 heading "📦 Downloading themes..." 2
 
 curl -s https://api.github.com/repos/wpwwhimself/shipyard/contents/files/scss | jq -r '.[] | [.name, .download_url] | @tsv' |
-while IFS=$ '\t' read -r name url; do
+while IFS=$'\t' read -r name url; do
   heading "$name..." 3
   curl -sSL "$url" -o "./raw/$name"
 done
