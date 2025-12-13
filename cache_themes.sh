@@ -15,6 +15,16 @@ source "$(dirname "$0")/src/functions.sh"
 
 heading "💄 Shipyard Theme Caching started" 1
 
+if [ ! -d "./raw" ]; then
+  mkdir ./raw
+fi
+if [ ! -d "./stitched" ]; then
+  mkdir ./stitched
+fi
+if [ ! -d "./ready" ]; then
+  mkdir ./ready
+fi
+
 heading "🔎 Checking for updates..." 2
 
 latest_release=$(curl -s https://api.github.com/repos/wpwwhimself/shipyard/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]*)".*/\1/' | tr -d '"')
