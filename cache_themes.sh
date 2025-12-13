@@ -65,6 +65,6 @@ done
 heading "🚚 Copying to public..." 2
 
 cp ./ready/* /var/www/wpww/shipyard_themes
-rm -rf ./ready/* ./stitched/* ./raw/*
+rm -rf ./ready ./stitched ./raw
 
 heading "✅ All done!" 1
